@@ -1,4 +1,4 @@
-@taoisttot
+@taoistbot
 ==========
 
 An enlightened Twitter bot.
