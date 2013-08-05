@@ -22,7 +22,7 @@ for i, line in enumerate(lines):
             f.write('\n' + str(chapter) + '\n')
             cur = chapter
     else:
-        f.write(line.strip() + '\n')
+        f.write(line.strip().replace('\n', ' ') + '\n')
 
 
 f.close()
