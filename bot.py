@@ -9,12 +9,14 @@ CHAPTER_SLEEP   = 30            # seconds
 TWEET_SLEEP     = 60 * 60 * 24  # seconds
 
 def read_credentials(file):
+
     fcred = open('cred.txt', 'r')
     cred = [ k.strip() for k in fcred.readlines() ]
     fcred.close() 
     return cred
 
 def tweet(twitter, msg, sep='.', part=1):
+
     if len(msg) <= MAX_MSG_LENGTH:
         twitter.statuses.update(status=msg)
         return
@@ -23,6 +25,8 @@ def tweet(twitter, msg, sep='.', part=1):
     cur = lines[0] + sep + ' '
     for line in lines[1:]:
         line = line.strip()
+        if len(line) == 0: continue
+
         if len(cur) + len(line) <= MAX_MSG_LENGTH - 5:
             cur += line + sep + ' '
         else:
@@ -37,21 +41,6 @@ def tweet(twitter, msg, sep='.', part=1):
                 cur = line + sep + ' '
             time.sleep(CHAPTER_SLEEP)
     
-    '''lines = msg.split(' ')
-    part = 1
-    cur = lines[0]
-    for line in lines[1:]:
-        line = line.strip()
-        if len(cur) + len(line) <= MAX_MSG_LENGTH - 5: # including length of (part)
-            cur += ' ' + line
-        else:
-            cur = cur + ' (' + str(part) + ')'
-            print cur
-            twitter.statuses.update(status=cur)
-            cur = line
-            part += 1                
-            time.sleep(CHAPTER_SLEEP)
-    '''
     if len(cur) > 0:
         cur = cur + ' (' + str(part) + ')'
         print cur
