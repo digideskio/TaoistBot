@@ -25,11 +25,13 @@ def tweet_chapter(twitter, chapter):
 def tweet(twitter, verse, sep='. ', part=1):
     
     if len(verse) <= MAX_MSG_LENGTH:
-        twitter.statuses.update(status=msg)
+        twitter.statuses.update(status=verse)
         print verse
+        time.sleep(CHAPTER_SLEEP)
         return part+1
    
     chunks = verse.split(sep)
+    #chunks = re.split(sep, verse)
     #print chunks
     buf = ''
     for i, chunk in enumerate(chunks):
@@ -48,7 +50,10 @@ def tweet(twitter, verse, sep='. ', part=1):
             part += 1
         
         if len(chunk) > MAX_MSG_LENGTH - 5:
-            new_sep = ', ' if sep == '. ' else '; '
+            #new_sep = ', ' if sep == '. ' else '; '
+            if   sep == '. ': new_sep = ', '
+            elif sep == ', ': new_sep = '; '
+            elif sep == '; ': new_sep = '? '
             part = tweet(twitter, chunk, sep=new_sep, part=part)
         else:
             buf = chunk
@@ -89,12 +94,6 @@ twitter = Twitter(auth=OAuth(
 
 while(True):
     chapter = random.randint(0, len(chapters)-1)
-    #chapter = 49
-    try:
-        tweet_chapter(twitter, chapters[chapter].strip())
-    except Exception as e:
-        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Error: " + e.strerror
-        twitter.statuses.update(status="Woops, something went wrong.")
-        #ferr = open('err.log', 'w+')
-        #ferr.write(
+    #chapter = 12
+    tweet_chapter(twitter, chapters[chapter].strip())
     time.sleep(TWEET_SLEEP)
