@@ -43,9 +43,10 @@ def tweet(twitter, verse, sep='. ', part=1):
             buf += chunk
             continue
 
-        if len(buf) > 0:
+        if len(buf) > 0: # stuff in buf, tweet and flush
             buf += ' ({0})'.format(part)
-            print buf
+            #print buf
+            tweet(twitter, buf, sep=sep, part=part)
             buf = ''
             part += 1
         
